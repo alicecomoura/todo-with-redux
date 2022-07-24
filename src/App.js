@@ -1,16 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-import { store } from './store'
+import { connect } from 'react-redux'
 
-export const App = () => {
+const App = ({ tarefas, addTarefa }) => {
   const [tarefa, setTarefa] = useState('')
-  const [tarefas, setTarefas] = useState([])
-
-  useEffect(() => {
-    store.subscribe(() => {
-      setTarefas(store.getState())
-    })
-  }, [])
 
   const handleInputChange = event => {
     setTarefa(event.target.value)
@@ -18,10 +11,7 @@ export const App = () => {
 
   const handleFormSubmit = event => {
     event.preventDefault()
-    store.dispatch({
-      type: 'ADD_TASK',
-      payload: tarefa
-    })
+    addTarefa(tarefa)
     setTarefa('')
   }
 
@@ -42,3 +32,19 @@ export const App = () => {
     </form>
   )
 }
+
+const mapStateToProps = estado => ({
+  tarefas: estado
+})
+
+const mapDispatchToProps = dispatch => ({
+  addTarefa: tarefa => dispatch({
+    type: 'ADD_TASK',
+    payload: tarefa
+  })
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
