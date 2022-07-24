@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const App = () => {
+  const [tarefa, setTarefa] = useState('')
+  const [tarefas, setTarefas] = useState([])
+
+  const handleInputChange = event => {
+    setTarefa(event.target.value)
+  }
+
+  const handleFormSubmit = event => {
+    event.preventDefault()
+
+    setTarefas(antigasTarefas => [
+      ...antigasTarefas,
+      tarefa, 
+    ])
+    setTarefa('')
+  }
+
+  return(
+    <form onSubmit={handleFormSubmit}>
+      <input
+        placeholder="Adicionar tarefa..."
+        type="text"
+        onChange={handleInputChange}
+        value={tarefa}
+      />
+      <button>Adicionar</button>
+      <ul>
+        {tarefas.map((tarefa, index) => (
+          <li key={index}>{tarefa}</li>
+        ))}
+      </ul>
+    </form>
+  )
 }
-
-export default App;
