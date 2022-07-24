@@ -1,9 +1,11 @@
 import { useState } from 'react'
 
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
-const App = ({ tarefas, addTarefa }) => {
+export const App = () => {
   const [tarefa, setTarefa] = useState('')
+  const dispatch = useDispatch()
+  const tarefas = useSelector(estado => estado)
 
   const handleInputChange = event => {
     setTarefa(event.target.value)
@@ -11,7 +13,10 @@ const App = ({ tarefas, addTarefa }) => {
 
   const handleFormSubmit = event => {
     event.preventDefault()
-    addTarefa(tarefa)
+    dispatch({
+      type: 'ADD_TASK',
+      payload: tarefa
+    })
     setTarefa('')
   }
 
@@ -32,19 +37,3 @@ const App = ({ tarefas, addTarefa }) => {
     </form>
   )
 }
-
-const mapStateToProps = estado => ({
-  tarefas: estado
-})
-
-const mapDispatchToProps = dispatch => ({
-  addTarefa: tarefa => dispatch({
-    type: 'ADD_TASK',
-    payload: tarefa
-  })
-})
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
