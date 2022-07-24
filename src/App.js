@@ -1,8 +1,16 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+import { store } from './store'
 
 export const App = () => {
   const [tarefa, setTarefa] = useState('')
   const [tarefas, setTarefas] = useState([])
+
+  useEffect(() => {
+    store.subscribe(() => {
+      setTarefas(store.getState())
+    })
+  }, [])
 
   const handleInputChange = event => {
     setTarefa(event.target.value)
@@ -10,11 +18,10 @@ export const App = () => {
 
   const handleFormSubmit = event => {
     event.preventDefault()
-
-    setTarefas(antigasTarefas => [
-      ...antigasTarefas,
-      tarefa, 
-    ])
+    store.dispatch({
+      type: 'ADD_TASK',
+      payload: tarefa
+    })
     setTarefa('')
   }
 
